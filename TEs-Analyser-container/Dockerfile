@@ -1,0 +1,52 @@
+FROM bioconductor/bioconductor_docker
+
+RUN apt-get update \
+&& apt-get install -y \
+curl \
+wget \
+libboost-all-dev \
+libudunits2-dev \
+mailutils
+
+# Install miniconda
+RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+&& bash Miniconda3-latest-Linux-x86_64.sh -b -p /opt/miniconda3 \
+&& /opt/miniconda3/bin/conda config --add channels conda-forge \
+&& /opt/miniconda3/bin/conda config --add channels bioconda \
+&& /opt/miniconda3/bin/conda config --add channels defaults
+
+
+# Install software required for rnaseq pipeline with bioconda
+# Set salmon version manually because otherwise it installs 0.13.1
+# Force version of samtools to avoid error https://github.com/bioconda/bioconda-recipes/issues/13958
+RUN /opt/miniconda3/bin/conda install -c bioconda \
+samtools=1.10 \
+star \
+deeptools \
+multiqc \
+pysam \
+bedops \
+fastqc \
+subread \
+samblaster \
+bamtools \
+dropseq_tools \
+bedtools
+
+
+# Install fastp manually because bioconda verison is not the latest
+RUN wget http://opengene.org/fastp/fastp \
+&& chmod a+x ./fastp \
+&& mv ./fastp /usr/local/bin
+
+
+# Install R packages
+RUN mkdir /install_packages
+COPY *.R /install_packages/
+RUN Rscript /install_packages/install_packages_cranDev.R
+RUN Rscript /install_packages/install_packages_bioc.R
+
+
+# Update path
+ENV PATH "/opt/miniconda3/bin:$PATH"
+ENV PATH "/usr/local/bin:$PATH"
