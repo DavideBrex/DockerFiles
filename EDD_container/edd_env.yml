@@ -12,12 +12,12 @@ dependencies:
   - ncurses=6.3=h7f8727e_2
   - pip=19.3.1=py27_0
   - python=2.7.18=ha1903f6_2
-  - readline=8.1.2=h7f8727e_0
   - sqlite=3.37.0=hc218d9a_0
   - tk=8.6.11=h1ccaba5_0
   - wheel=0.37.1=pyhd3eb1b0_0
   - zlib=1.2.11=h7f8727e_4
   - pip:
+    - readline=8.1.2
     - cython==0.29.26
     - edd==1.1.19
     - logbook==1.5.3
