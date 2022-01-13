@@ -1,4 +1,3 @@
-name: edd_env
 channels:
   - defaults
 dependencies:
@@ -33,4 +32,3 @@ dependencies:
     - setuptools==44.1.1
     - six==1.16.0
     - statsmodels==0.10.0
-prefix: /home/davidebrex/miniconda3/envs/edd_env
